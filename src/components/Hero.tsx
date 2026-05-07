@@ -1,42 +1,277 @@
+// /* eslint-disable react-hooks/set-state-in-effect */
+// /* eslint-disable react-hooks/purity */
+// /* eslint-disable @next/next/no-img-element */
+// "use client";
+
+// import { useState, useEffect } from "react";
+
+// const heroImages = [
+//   "/images/hero-pic-1.jpg",
+//   "/images/hero-pic-2.jpg",
+//   "/images/hero-pic-3.jpg",
+//   "/images/hero-pic-4.jpg",
+//   "/images/hero-pic-5.jpg",
+// ];
+
+// export default function Hero() {
+//   const [bgImage, setBgImage] = useState(heroImages[0]);
+
+//   useEffect(() => {
+//     const randomImage =
+//       heroImages[Math.floor(Math.random() * heroImages.length)];
+//     setBgImage(randomImage);
+//   }, []);
+
+//   return (
+//     <section className="relative w-full h-160 flex flex-col items-center justify-center overflow-hidden rounded-2xl bg-[oklab(0.181061_-0.00153356_-0.000468194/0.3)] mt-2">
+//       {/* Background image */}
+//       <div
+//         className="absolute inset-0 bg-cover bg-center blur-sm scale-105 rounded-2xl"
+//         style={{ backgroundImage: `url(${bgImage})` }}
+//       />
+
+//       {/* Overlay */}
+//       <div className="absolute inset-0 bg-black/30 rounded-2xl" />
+
+//       {/* Content */}
+//       <div className="relative z-20 flex flex-col items-center text-center px-6 md:px-12 -translate-y-4">
+//         {/* Achievement block */}
+//         <div className="flex flex-col items-center justify-center mb-3">
+//           <p className="text-white block font-sans text-[12px] font-medium leading-3.75 tracking-[0.3px] uppercase text-center w-52 max-w-52">
+//             #1 Most recommended content marketing agency
+//           </p>
+//           <div className="flex items-center justify-center box-border mt-1">
+//             <img
+//               src="/images/achievement.PNG"
+//               alt="Awards"
+//               className="w-72 h-12"
+//             />
+//           </div>
+//         </div>
+
+//         {/* Headline with inline image */}
+//         <h1 className="inline-flex flex-col justify-center items-center text-center text-white font-sans font-medium tracking-tight text-[120px] leading-27 mt-2 mb-0 overflow-visible">
+//           <span className="block">We Create</span>
+//           <span className="inline-flex items-baseline">
+//             <span className="mr-2">Category</span>
+//             <span className="inline-block w-28 h-auto mx-2 rounded-2xl overflow-hidden">
+//               <img
+//                 src={bgImage}
+//                 alt="Inline"
+//                 className="w-full h-full object-cover rounded-2xl"
+//               />
+//             </span>
+//             <span className="ml-2">Leaders</span>
+//           </span>
+//         </h1>
+
+//         {/* Subtitle */}
+//         <div className="text-white block font-sans font-medium text-[32px] leading-6 w-198.5 text-center mt-8">
+//           on every searchable platform
+//         </div>
+
+//         {/* Bottom logos row */}
+//         <div className="w-full hidden 3xl:flex justify-center mt-12 gap-x-14">
+//           <img
+//             src="/logos/gogle.png"
+//             alt="Gogle"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/chat-gpt.png"
+//             alt="Chat GPT"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/gemini.png"
+//             alt="Gemini"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/tiktok.png"
+//             alt="Tiktok"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/youtube.png"
+//             alt="Youtube"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/pinterest.png"
+//             alt="Pinterest"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/giphy.png"
+//             alt="Giphy"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/reddit.png"
+//             alt="Reddit"
+//             className="w-16 h-auto object-contain"
+//           />
+//           <img
+//             src="/logos/amazon.png"
+//             alt="Amazon"
+//             className="w-16 h-auto object-contain"
+//           />
+//         </div>
+//         {/* Bottom corner texts */}
+//         <div className="absolute bottom-8 left-0 right-0 z-20 flex items-end justify-between px-8 md:px-10">
+//           <p className="text-white block font-sans text-[16px] leading-6 text-left w-[414.677px]">
+//             Organic media planners creating, distributing & optimising
+//             <br />
+//             search-first content for SEO, Social, PR, Ai and LLM search
+//           </p>
+
+//           <p className="text-white block font-sans text-[16px] leading-6 text-right">
+//             4 Global Offices serving
+//             <br />
+//             UK, USA (New York) & EU
+//           </p>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-hooks/purity */
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import { useState, useEffect } from "react";
+
+const heroImages = [
+  "/images/hero-pic-1.jpg",
+  "/images/hero-pic-2.jpg",
+  "/images/hero-pic-3.jpg",
+  "/images/hero-pic-4.jpg",
+  "/images/hero-pic-5.jpg",
+];
+
 export default function Hero() {
+  const [bgImage, setBgImage] = useState(heroImages[0]);
+
+  useEffect(() => {
+    const randomImage =
+      heroImages[Math.floor(Math.random() * heroImages.length)];
+    setBgImage(randomImage);
+  }, []);
+
   return (
-    <section className="relative mt-[6px] h-[calc(100svh-39px)] min-h-[560px] overflow-hidden rounded-[18px] bg-black text-white md:mt-[10px] md:h-[calc(100svh-56px)] md:min-h-[720px] md:rounded-[32px]">
-      {/* Temporary background until we extract the real asset */}
-      <div className="absolute inset-0 scale-105 bg-[radial-gradient(circle_at_20%_35%,rgba(40,70,120,0.85),transparent_28%),radial-gradient(circle_at_75%_60%,rgba(210,135,40,0.9),transparent_32%),radial-gradient(circle_at_55%_25%,rgba(160,155,130,0.8),transparent_35%),linear-gradient(135deg,#090909,#6f7f8b)] blur-[6px]" />
+    <section className="relative w-full h-135 flex flex-col items-center justify-center overflow-hidden rounded-2xl bg-[oklab(0.181061_-0.00153356_-0.000468194/0.3)] mt-2">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center blur-sm scale-105 rounded-2xl"
+        style={{ backgroundImage: `url(${bgImage})` }}
+      />
 
-      <div className="absolute inset-0 bg-black/35" />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/30 rounded-2xl" />
 
-      <div className="relative flex h-full flex-col items-center justify-center px-4 pt-16 text-center md:pt-24">
-        <div className="mb-6 text-center text-[11px] font-bold uppercase leading-[0.95] tracking-[-0.04em] md:text-[18px]">
-          <p>#1 Most Recommended</p>
-          <p>Content Marketing Agency</p>
+      {/* Main content wrapper */}
+      <div className="relative z-20 flex flex-col items-center text-center px-6 md:px-12 -translate-y-2">
+        {/* Achievement block */}
+        <div className="flex flex-col items-center justify-center mb-3">
+          <p className="text-white block font-sans font-medium text-[12px] leading-3 tracking-[-.5px] uppercase text-center w-52 max-w-52">
+            #1 Most recommended <br />
+            content marketing agency
+          </p>
+          <div className="flex items-center justify-center box-border mt-1">
+            <img
+              src="/images/achievement.PNG"
+              alt="Awards"
+              className="w-72 h-12"
+            />
+          </div>
         </div>
 
-        <h1 className="text-[47px] font-bold leading-[0.82] tracking-[-0.075em] md:text-[130px] xl:text-[150px]">
+        {/* Headline with inline image */}
+        <h1 className="inline-flex flex-col justify-center items-center text-center text-white font-sans font-medium text-[120px] leading-27 tracking-[-4.2px] mt-2 mb-0 overflow-visible">
           <span className="block">We Create</span>
-          <span className="block">
-            Category{" "}
-            <span className="hidden h-[88px] w-[120px] rounded-[18px] bg-white/25 align-middle md:inline-block" />{" "}
-            Leaders
+          <span className="inline-flex items-baseline">
+            <span className="mr-2">Category</span>
+            <span className="relative inline-block mx-2 w-[107.998px] h-[107.998px] overflow-hidden rounded-2xl align-middle">
+              <img
+                src={bgImage}
+                alt="Inline"
+                className="absolute inset-0 block w-full h-full max-w-full object-cover rounded-2xl align-middle"
+              />
+            </span>
+            <span className="ml-2">Leaders</span>
           </span>
         </h1>
 
-        <p className="mt-5 text-[13px] font-bold leading-none tracking-[-0.05em] md:mt-8 md:text-[34px]">
+        {/* Subtitle */}
+        <div className="text-white block font-sans font-medium text-[32px] tracking-[-2px] leading-6 w-198.5 text-center mt-8">
           on every searchable platform
-        </p>
-
-        <div className="absolute bottom-5 left-3 right-3 flex justify-center md:bottom-9 md:left-8 md:right-8 md:justify-between">
-          <p className="hidden max-w-[460px] text-left text-[22px] font-semibold leading-[1.25] tracking-[-0.05em] md:block">
-            Organic media planners creating, distributing & optimising
-            search-first content for SEO, Social, PR, Ai and LLM search
-          </p>
-
-          <p className="max-w-[220px] text-center text-[10px] font-bold leading-tight tracking-[-0.05em] md:max-w-[300px] md:text-right md:text-[24px]">
-            4 Global Offices serving
-            <br />
-            UK, USA (New York) & EU
-          </p>
         </div>
+      </div>
+
+      {/* Logos row centered above bottom texts */}
+      <div className="w-full hidden 3xl:flex justify-center mt-8 z-20">
+        <img
+          src="/logos/gogle.png"
+          alt="Gogle"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/chat-gpt.png"
+          alt="Chat GPT"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/gemini.png"
+          alt="Gemini"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/tiktok.png"
+          alt="Tiktok"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/youtube.png"
+          alt="Youtube"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/pinterest.png"
+          alt="Pinterest"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/giphy.png"
+          alt="Giphy"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/reddit.png"
+          alt="Reddit"
+          className="w-16 h-auto object-contain"
+        />
+        <img
+          src="/logos/amazon.png"
+          alt="Amazon"
+          className="w-16 h-auto object-contain"
+        />
+      </div>
+
+      {/* Bottom corner texts fixed relative to Hero section */}
+      <div className="absolute bottom-3 left-1 right-1 flex justify-between px-4 md:px-4">
+        <p className="text-white/90 block font-sans font-semibold text-[14px] leading-6 text-left w-[414.677px]">
+          Organic media planners creating, distributing & optimising
+          <br />
+          search-first content for SEO, Social, PR, Ai and LLM search
+        </p>
+        <p className="text-white block font-sans font-medium text-[16px] leading-6 text-right">
+          4 Global Offices serving
+          <br />
+          UK, USA (New York) & EU
+        </p>
       </div>
     </section>
   );

@@ -1,6 +1,5 @@
 export default function AnnouncementBar() {
-  const text =
-    "🚨 Where are your customers actually searching? Download the report";
+  const text = "🚨 The Category Leaderboard - Live Now";
 
   return (
     <div className="group relative z-50 w-full overflow-hidden rounded-full bg-[#aef7df] text-black">
