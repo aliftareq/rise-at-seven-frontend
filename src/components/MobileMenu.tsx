@@ -29,6 +29,11 @@ const menuItems = [
     ],
   },
   {
+    label: "Industries",
+    href: "/industries",
+    children: [{ label: "B2B MARKETING", href: "/industries/us-digital-pr" }],
+  },
+  {
     label: "International",
     href: "/international",
     children: [
@@ -191,9 +196,9 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
 
         {/* CTA */}
         <Link
-          href="/connect-with-us"
+          href="/"
           onClick={onClose}
-          className="group inline-flex w-full shrink-0 flex-row-reverse items-center justify-center gap-x-2 overflow-hidden rounded-3xl border border-transparent bg-white px-6 py-3 text-base font-medium capitalize leading-tight tracking-[-0.04em] text-[#111212] transition-[border-radius] duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] hover:rounded-xl"
+          className="group inline-flex w-full shrink-0 flex-row-reverse items-center justify-center gap-x-2 overflow-hidden rounded-3xl border border-transparent bg-white px-6 py-3 text-base font-medium capitalize leading-tight tracking-[-0.04em] text-[#111212]! transition-[border-radius] duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] hover:rounded-xl"
         >
           <span className="relative block h-5 overflow-hidden whitespace-nowrap text-current">
             <span className="flex h-5 items-center gap-x-2 text-current transition-transform duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] group-hover:-translate-y-6">
