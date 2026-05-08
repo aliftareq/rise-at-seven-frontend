@@ -1,4 +1,5 @@
 import AnnouncementBar from "@/components/AnnouncementBar";
+import BrandTicker from "@/components/BrandTicker";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 // import Hero from "@/components/Hero";
@@ -9,6 +10,7 @@ export default function Home() {
       <AnnouncementBar />
       <Navbar />
       <Hero />
+      <BrandTicker />
 
       {/* Temporary scroll area to test sticky navbar behavior */}
       <section className="min-h-screen px-4 py-24 text-black md:px-8">
