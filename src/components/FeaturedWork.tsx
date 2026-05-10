@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/immutability */
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-// ─── Types & Data ─────────────────────────────────────────────────────────────
 
 type Project = {
   id: number;
@@ -142,8 +142,6 @@ const projects: Project[] = [
   },
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 function isLightColor(hex: string): boolean {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -155,8 +153,6 @@ function isLightColor(hex: string): boolean {
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
-
-// ─── Icons ────────────────────────────────────────────────────────────────────
 
 function IconSearch() {
   return (
@@ -215,8 +211,6 @@ function IconArrow({ color }: { color: string }) {
   );
 }
 
-// ─── Badge ────────────────────────────────────────────────────────────────────
-
 function CategoryBadge({
   category,
   style,
@@ -243,8 +237,6 @@ function CategoryBadge({
     </div>
   );
 }
-
-// ─── Project Card ─────────────────────────────────────────────────────────────
 
 function ProjectCard({
   project,
@@ -400,6 +392,7 @@ function ProjectCard({
 
         {project.category && (
           <div
+            data-card-category-badge
             style={{
               position: "absolute",
               right: 14,
@@ -417,6 +410,43 @@ function ProjectCard({
             />
           </div>
         )}
+
+        <div
+          data-mobile-card-info
+          style={{
+            position: "absolute",
+            left: 14,
+            bottom: 12,
+            zIndex: 12,
+            display: "none",
+            color: "#ffffff",
+            pointerEvents: "none",
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 2px 0",
+              fontSize: 11,
+              fontWeight: 600,
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            [{project.years}]
+          </p>
+
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 26,
+              fontWeight: 700,
+              lineHeight: 0.9,
+              letterSpacing: "-0.075em",
+            }}
+          >
+            {project.name}
+          </h3>
+        </div>
       </div>
 
       <div
@@ -499,8 +529,6 @@ function ProjectCard({
     </div>
   );
 }
-
-// ─── Main Export ──────────────────────────────────────────────────────────────
 
 const TRACK_HEIGHT = 340;
 const THUMB_HEIGHT = 180;
@@ -680,13 +708,6 @@ export default function FeaturedWork() {
     [startMomentumScroll],
   );
 
-  const handleVisible = useCallback(
-    (idx: number) => {
-      setActiveProject(idx);
-    },
-    [setActiveProject],
-  );
-
   const scrollToCard = useCallback(
     (idx: number) => {
       const panel = rightPanelRef.current;
@@ -836,246 +857,364 @@ export default function FeaturedWork() {
   }, [updateScrollLinkedUI]);
 
   return (
-    <section
-      ref={sectionRef}
-      data-featured-work-section
+    <div
+      data-featured-work-wrapper
       style={{
-        display: "flex",
-        background: "#111212",
-        borderRadius: 24,
-        height: "92vh",
-        overflow: "hidden",
-        fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-        overscrollBehavior: "auto",
-        touchAction: "pan-y",
+        background: "#eeeeec",
+        paddingBottom: 64,
+        position: "relative",
+        minHeight: "90vh",
       }}
     >
-      {/* LEFT PANEL */}
-      <div
+      <section
+        ref={sectionRef}
+        data-featured-work-section
         style={{
-          width: "50%",
-          flexBasis: "50%",
-          flexShrink: 0,
-          position: "relative",
-          height: "92vh",
           display: "flex",
-          flexDirection: "column",
-          padding: "48px 32px 48px 40px",
+          background: "#111212",
+          borderRadius: 24,
+          height: "90vh",
           overflow: "hidden",
+          fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+          overscrollBehavior: "auto",
+          touchAction: "pan-y",
         }}
       >
-        <p
-          style={{
-            color: "#ffffff",
-            fontSize: 28,
-            fontWeight: 500,
-            letterSpacing: "-0.055em",
-            lineHeight: 1,
-            margin: "0 0 64px 0",
-          }}
-        >
-          Featured Work
-        </p>
-
         <div
-          ref={nameViewportRef}
+          data-featured-work-left-panel
           style={{
+            width: "50%",
+            flexBasis: "50%",
+            flexShrink: 0,
             position: "relative",
-            flex: 1,
+            height: "92vh",
+            display: "flex",
+            flexDirection: "column",
+            padding: "48px 32px 48px 40px",
             overflow: "hidden",
-            paddingRight: 108,
           }}
         >
-          <div
+          <p
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "34%",
-              zIndex: 20,
-              pointerEvents: "none",
-              background:
-                "linear-gradient(to bottom, #111212 0%, rgba(17,18,18,0.94) 22%, rgba(17,18,18,0.42) 68%, rgba(17,18,18,0) 100%)",
-            }}
-          />
-
-          <div
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "34%",
-              zIndex: 20,
-              pointerEvents: "none",
-              background:
-                "linear-gradient(to top, #111212 0%, rgba(17,18,18,0.94) 22%, rgba(17,18,18,0.42) 68%, rgba(17,18,18,0) 100%)",
-            }}
-          />
-
-          <div
-            ref={nameListRef}
-            style={{
-              position: "relative",
-              zIndex: 10,
-              display: "grid",
-              gap: 2,
-              willChange: "transform",
-              transform: "translate3d(0, 0, 0)",
+              color: "#ffffff",
+              fontSize: 28,
+              fontWeight: 500,
+              letterSpacing: "-0.055em",
+              lineHeight: 1,
+              margin: "0 0 64px 0",
             }}
           >
-            {projects.map((project, index) => {
-              const distance = Math.abs(activeIndex - index);
-              const isActive = activeIndex === index;
+            Featured Work
+          </p>
 
-              return (
-                <div
-                  key={project.id}
-                  ref={(el) => {
-                    nameItemRefs.current[index] = el;
-                  }}
-                  onClick={() => scrollToCard(index)}
-                  style={{
-                    position: "relative",
-                    minHeight: 72,
-                    cursor: "pointer",
-                    paddingRight: 102,
-                    transform: isActive ? "translateX(12px)" : "translateX(0)",
-                    opacity: distance > 3 ? 0.18 : 1,
-                    transition:
-                      "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease",
-                  }}
-                >
+          <div
+            ref={nameViewportRef}
+            style={{
+              position: "relative",
+              flex: 1,
+              overflow: "hidden",
+              paddingRight: 108,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "34%",
+                zIndex: 20,
+                pointerEvents: "none",
+                background:
+                  "linear-gradient(to bottom, #111212 0%, rgba(17,18,18,0.94) 22%, rgba(17,18,18,0.42) 68%, rgba(17,18,18,0) 100%)",
+              }}
+            />
+
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "34%",
+                zIndex: 20,
+                pointerEvents: "none",
+                background:
+                  "linear-gradient(to top, #111212 0%, rgba(17,18,18,0.94) 22%, rgba(17,18,18,0.42) 68%, rgba(17,18,18,0) 100%)",
+              }}
+            />
+
+            <div
+              ref={nameListRef}
+              style={{
+                position: "relative",
+                zIndex: 10,
+                display: "grid",
+                gap: 2,
+                willChange: "transform",
+                transform: "translate3d(0, 0, 0)",
+              }}
+            >
+              {projects.map((project, index) => {
+                const distance = Math.abs(activeIndex - index);
+                const isActive = activeIndex === index;
+
+                return (
                   <div
+                    key={project.id}
+                    ref={(el) => {
+                      nameItemRefs.current[index] = el;
+                    }}
+                    onClick={() => scrollToCard(index)}
                     style={{
-                      color: isActive ? "#ffffff" : "rgba(255,255,255,0.22)",
-                      fontSize: "clamp(48px, 5.75vw, 82px)",
-                      fontWeight: 500,
-                      letterSpacing: "-0.075em",
-                      lineHeight: 0.86,
-                      textAlign: "left",
-                      textWrap: "balance",
-                      transition: "color 0.5s ease",
+                      position: "relative",
+                      minHeight: 72,
+                      cursor: "pointer",
+                      paddingRight: 102,
+                      transform: isActive
+                        ? "translateX(12px)"
+                        : "translateX(0)",
+                      opacity: distance > 3 ? 0.18 : 1,
+                      transition:
+                        "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease",
                     }}
                   >
-                    {project.name}
-                  </div>
+                    <div
+                      style={{
+                        color: isActive ? "#ffffff" : "rgba(255,255,255,0.22)",
+                        fontSize: "clamp(48px, 5.75vw, 82px)",
+                        fontWeight: 500,
+                        letterSpacing: "-0.075em",
+                        lineHeight: 0.86,
+                        textAlign: "left",
+                        textWrap: "balance",
+                        transition: "color 0.5s ease",
+                      }}
+                    >
+                      {project.name}
+                    </div>
 
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top: 6,
-                      color: isActive
-                        ? "rgba(255,255,255,0.72)"
-                        : "rgba(255,255,255,0.25)",
-                      fontSize: 16,
-                      fontWeight: 600,
-                      letterSpacing: "-0.04em",
-                      lineHeight: 1.08,
-                      textAlign: "left",
-                      width: 86,
-                      transition: "color 0.5s ease",
-                    }}
-                  >
-                    [{project.years}]
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: 6,
+                        color: isActive
+                          ? "rgba(255,255,255,0.72)"
+                          : "rgba(255,255,255,0.25)",
+                        fontSize: 16,
+                        fontWeight: 600,
+                        letterSpacing: "-0.04em",
+                        lineHeight: 1.08,
+                        textAlign: "left",
+                        width: 86,
+                        transition: "color 0.5s ease",
+                      }}
+                    >
+                      [{project.years}]
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* RIGHT PANEL WRAPPER */}
-      <div
-        style={{
-          width: "50%",
-          flexBasis: "50%",
-          flexShrink: 0,
-          position: "relative",
-          height: "92vh",
-          overflow: "hidden",
-        }}
-      >
-        {/* Moving gradient stick only */}
         <div
-          aria-hidden="true"
           style={{
-            position: "absolute",
-            left: 0,
-            top: `calc(50% - ${TRACK_HEIGHT / 2}px + ${thumbTop}px)`,
-            zIndex: 80,
-            width: 12,
-            height: THUMB_HEIGHT,
-            pointerEvents: "none",
-            borderRadius: 0,
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.62) 18%, rgba(0,0,0,0.08) 48%, rgba(0,0,0,0.08) 54%, rgba(0,0,0,0.62) 82%, rgba(0,0,0,0.96) 100%)",
-            transition: "top 0.12s linear",
+            width: "50%",
+            flexBasis: "50%",
+            flexShrink: 0,
+            position: "relative",
+            height: "92vh",
+            overflow: "hidden",
           }}
-        />
-
-        {/* RIGHT SCROLL AREA */}
-        <div
-          ref={rightPanelRef}
-          data-fw-scroll
-          onScroll={updateScrollLinkedUI}
-          style={
-            {
-              width: "100%",
-              height: "100%",
-              overflowY: "auto",
-              padding: "28px 40px 56px 0",
-              scrollbarWidth: "none",
-              overscrollBehavior: "auto",
-              scrollBehavior: "auto",
-              WebkitOverflowScrolling: "touch",
-            } as React.CSSProperties
-          }
         >
-          <style>{`
-            [data-fw-scroll]::-webkit-scrollbar {
-              display: none;
+          <div
+            data-featured-work-scroll-stick
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: 0,
+              top: `calc(50% - ${TRACK_HEIGHT / 2}px + ${thumbTop}px)`,
+              zIndex: 80,
+              width: 12,
+              height: THUMB_HEIGHT,
+              pointerEvents: "none",
+              borderRadius: 0,
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.62) 18%, rgba(0,0,0,0.08) 48%, rgba(0,0,0,0.08) 54%, rgba(0,0,0,0.62) 82%, rgba(0,0,0,0.96) 100%)",
+              transition: "top 0.12s linear",
+            }}
+          />
+
+          <div
+            ref={rightPanelRef}
+            data-fw-scroll
+            onScroll={updateScrollLinkedUI}
+            style={
+              {
+                width: "100%",
+                height: "100%",
+                overflowY: "auto",
+                padding: "28px 40px 56px 0",
+                scrollbarWidth: "none",
+                overscrollBehavior: "auto",
+                scrollBehavior: "auto",
+                WebkitOverflowScrolling: "touch",
+              } as React.CSSProperties
             }
-
-            @media (max-width: 900px) {
-              [data-featured-work-section] {
-                flex-direction: column;
-                height: auto !important;
+          >
+            <style>{`
+              [data-fw-scroll]::-webkit-scrollbar {
+                display: none;
               }
 
-              [data-featured-work-section] > div:first-child {
-                width: 100% !important;
-                flex-basis: auto !important;
-                height: 460px !important;
-                position: relative !important;
-                padding: 36px 22px !important;
+              [data-featured-work-cta-wrap] {
+                display: flex;
+                justify-content: center;
+                padding: 42px 16px 0;
               }
 
-              [data-featured-work-section] > div:last-child {
-                width: 100% !important;
-                flex-basis: auto !important;
-                height: auto !important;
+              [data-featured-work-cta] {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                height: 68px;
+                padding: 0 38px;
+                border-radius: 999px;
+                background: #ffffff;
+                color: #111212;
+                font-size: 23px;
+                font-weight: 600;
+                line-height: 1;
+                letter-spacing: -0.055em;
+                text-decoration: none;
               }
 
-              [data-fw-scroll] {
-                padding: 0 16px 32px 16px !important;
-              }
-            }
-          `}</style>
+              @media (max-width: 900px) {
+                [data-featured-work-wrapper] {
+                  padding-bottom: 48px !important;
+                }
 
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              onVisible={handleVisible}
-            />
-          ))}
+                [data-featured-work-section] {
+                  display: block !important;
+                  height: auto !important;
+                  border-radius: 18px !important;
+                  overflow: hidden !important;
+                }
+
+                [data-featured-work-left-panel] {
+                  display: none !important;
+                }
+
+                [data-featured-work-section] > div:last-child {
+                  width: 100% !important;
+                  flex-basis: auto !important;
+                  height: auto !important;
+                }
+
+                [data-featured-work-scroll-stick] {
+                  display: none !important;
+                }
+
+                [data-fw-scroll] {
+                  height: auto !important;
+                  overflow: visible !important;
+                  padding: 14px 10px 14px 10px !important;
+                }
+
+                [data-index] {
+                  margin-bottom: 10px !important;
+                  border-radius: 10px !important;
+                  cursor: pointer !important;
+                }
+
+                [data-index] > div:first-child {
+                  padding-top: 74% !important;
+                }
+
+                [data-card-category-badge] {
+                  top: 10px !important;
+                  right: 10px !important;
+                  bottom: auto !important;
+                }
+
+                [data-card-category-badge] > div {
+                  padding: 5px 9px !important;
+                  gap: 5px !important;
+                  font-size: 10px !important;
+                }
+
+                [data-mobile-card-info] {
+                  display: block !important;
+                }
+
+                [data-index] > div:nth-child(2),
+                [data-index] > div:nth-child(3) {
+                  display: none !important;
+                }
+
+                [data-featured-work-cta-wrap] {
+                  padding: 42px 10px 0 !important;
+                }
+
+                [data-featured-work-cta] {
+                  width: 100% !important;
+                  height: 58px !important;
+                  font-size: 20px !important;
+                }
+              }
+            `}</style>
+
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                onVisible={setActiveProject}
+              />
+            ))}
+          </div>
         </div>
+      </section>
+
+      <div data-featured-work-cta-wrap>
+        <Link href="/work" data-featured-work-cta className="group">
+          <span className="relative block h-6 overflow-hidden whitespace-nowrap text-current">
+            {/* First text layer */}
+            <span className="flex h-6 items-center justify-center gap-x-2 whitespace-nowrap text-current transition-transform duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] group-hover:-translate-y-7">
+              <span className="whitespace-nowrap text-current">
+                Explore Our Work
+              </span>
+
+              <span className="mt-1 inline-block shrink-0 text-xs leading-none text-current">
+                <ArrowUpRight
+                  size={20}
+                  strokeWidth={2.4}
+                  className="shrink-0 text-current"
+                />
+              </span>
+            </span>
+
+            {/* Second text layer */}
+            <span className="absolute left-0 top-0 flex h-6 translate-y-7 items-center justify-center gap-x-2 whitespace-nowrap text-current transition-transform duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] group-hover:translate-y-0">
+              <span className="whitespace-nowrap text-current">
+                Explore Our Work
+              </span>
+
+              <span className="mt-1 inline-block shrink-0 text-xs leading-none text-current">
+                <ArrowUpRight
+                  size={20}
+                  strokeWidth={2.4}
+                  className="shrink-0 text-current"
+                />
+              </span>
+            </span>
+          </span>
+        </Link>
       </div>
-    </section>
+    </div>
   );
 }
