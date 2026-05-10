@@ -1,5 +1,6 @@
 import AnnouncementBar from "@/components/AnnouncementBar";
 import BrandTicker from "@/components/BrandTicker";
+import Contact from "@/components/Contact";
 import DemandDiscovery from "@/components/DemandDiscovery";
 import FeaturedWork from "@/components/FeaturedWork";
 import Hero from "@/components/Hero";
@@ -20,6 +21,7 @@ export default function Home() {
         <DemandDiscovery />
         <FeaturedWork />
         <ServicesSection />
+        <Contact />
       </div>
     </main>
   );

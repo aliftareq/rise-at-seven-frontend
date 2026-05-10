@@ -5,32 +5,32 @@ import { ArrowUpRight } from "lucide-react";
 const services = [
   {
     title: "Digital PR",
-    href: "/services/digital-pr",
+    href: "/",
     image: "/images/services/Digital_PR.jpg",
   },
   {
     title: "Organic Social & Content",
-    href: "/services/organic-social-content",
+    href: "/",
     image: "/images/services/organic-social-content.jpg",
   },
   {
     title: "Search & Growth Strategy",
-    href: "/services/search-growth-strategy",
+    href: "/",
     image: "/images/services/search-growth-strategy.jpg",
   },
   {
     title: "Content Experience",
-    href: "/services/content-experience",
+    href: "/",
     image: "/images/services/content-experience.jpg",
   },
   {
     title: "Data & Insights",
-    href: "/services/data-insight.jpg",
+    href: "/",
     image: "/images/services/data-insight.jpg",
   },
   {
     title: "Onsite SEO",
-    href: "/services/onsite-seo",
+    href: "/",
     image: "/images/services/onsite-ceo.jpg",
   },
 ];
