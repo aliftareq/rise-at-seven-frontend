@@ -125,7 +125,7 @@ export default function ServicesSection() {
 
                         {/* Title */}
                         <div className="transition duration-500 xl:group-hover:translate-x-14">
-                          <h3 className="text-[28px] font-medium leading-none tracking-[-0.035em] md:text-[34px] lg:text-[40px] xl:text-[44px] 2xl:text-[48px]">
+                          <h3 className="text-[28px] font-medium leading-none tracking-[-0.035em] md:text-[34px]  xl:text-[50px]">
                             {service.title}
                           </h3>
                         </div>

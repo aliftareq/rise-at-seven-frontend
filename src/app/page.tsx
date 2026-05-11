@@ -4,6 +4,7 @@ import Contact from "@/components/Contact";
 import DemandDiscovery from "@/components/DemandDiscovery";
 import FeaturedWork from "@/components/FeaturedWork";
 import Hero from "@/components/Hero";
+import LegacyCards from "@/components/LegacyCards";
 import Navbar from "@/components/Navbar";
 import ServicesSection from "@/components/ServicesSection";
 // import Hero from "@/components/Hero";
@@ -22,6 +23,7 @@ export default function Home() {
         <FeaturedWork />
         <ServicesSection />
         <Contact />
+        <LegacyCards />
       </div>
     </main>
   );
