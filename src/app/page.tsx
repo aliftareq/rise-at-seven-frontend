@@ -1,4 +1,5 @@
 import AnnouncementBar from "@/components/AnnouncementBar";
+import Blog from "@/components/Blog";
 import BrandTicker from "@/components/BrandTicker";
 import Contact from "@/components/Contact";
 import DemandDiscovery from "@/components/DemandDiscovery";
@@ -24,6 +25,7 @@ export default function Home() {
         <ServicesSection />
         <Contact />
         <LegacyCards />
+        <Blog />
       </div>
     </main>
   );
