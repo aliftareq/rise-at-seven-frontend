@@ -57,19 +57,22 @@ export default function Hero() {
 
           {/* Second line: wrap elements and allow responsive break */}
           <span className="flex flex-wrap justify-center items-center">
-            <span className="mr-2 w-full sm:w-auto text-center sm:text-left">
+            <span className="mr-2 text-center sm:w-auto sm:text-left">
               Category
             </span>
 
-            <span className="hidden xl:block relative mx-2 w-[107.998px] h-[107.998px] overflow-hidden rounded-2xl align-middle">
+            <span className="relative mx-2 h-16 w-16 overflow-hidden rounded-xl align-middle sm:h-[107.998px] sm:w-[107.998px] sm:rounded-2xl">
               <img
                 src={bgImage}
                 alt="Inline"
-                className="absolute inset-0 block w-full h-full max-w-full object-cover rounded-2xl align-middle"
+                className="absolute inset-0 block h-full w-full max-w-full object-cover rounded-xl align-middle sm:rounded-2xl"
               />
             </span>
 
-            <span className="ml-2 w-full sm:w-auto text-center sm:text-left">
+            {/* mobile-only break after image */}
+            <span className="basis-full sm:hidden" />
+
+            <span className="mt-2 text-center sm:ml-2 sm:mt-0 sm:w-auto sm:text-left">
               Leaders
             </span>
           </span>
