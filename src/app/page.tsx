@@ -9,6 +9,7 @@ import Contact from "@/components/Contact";
 import LegacyCards from "@/components/LegacyCards";
 import Blog from "@/components/Blog";
 import ReadyToRiseSnake from "@/components/ReadyToRiseSnake";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
         <LegacyCards />
         <Blog />
         <ReadyToRiseSnake />
+        <Footer />
       </div>
     </main>
   );
