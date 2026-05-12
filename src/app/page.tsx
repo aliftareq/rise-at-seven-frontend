@@ -1,14 +1,14 @@
 import AnnouncementBar from "@/components/AnnouncementBar";
-import Blog from "@/components/Blog";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
 import BrandTicker from "@/components/BrandTicker";
-import Contact from "@/components/Contact";
 import DemandDiscovery from "@/components/DemandDiscovery";
 import FeaturedWork from "@/components/FeaturedWork";
-import Hero from "@/components/Hero";
-import LegacyCards from "@/components/LegacyCards";
-import Navbar from "@/components/Navbar";
 import ServicesSection from "@/components/ServicesSection";
-// import Hero from "@/components/Hero";
+import Contact from "@/components/Contact";
+import LegacyCards from "@/components/LegacyCards";
+import Blog from "@/components/Blog";
+import ReadyToRiseSnake from "@/components/ReadyToRiseSnake";
 
 export default function Home() {
   return (
@@ -26,6 +26,7 @@ export default function Home() {
         <Contact />
         <LegacyCards />
         <Blog />
+        <ReadyToRiseSnake />
       </div>
     </main>
   );
