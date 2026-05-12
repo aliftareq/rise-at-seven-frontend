@@ -125,7 +125,7 @@ export default function Contact() {
       onMouseMove={(e) => {
         mouse.current = { x: e.clientX, y: e.clientY };
       }}
-      className="relative overflow-hidden bg-grey-100 py-2 text-[#111212] md:py-9"
+      className="relative overflow-hidden bg-grey-100 py-8 text-[#111212] md:py-9"
     >
       <a
         ref={cursorRef}

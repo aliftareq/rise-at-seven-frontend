@@ -37,13 +37,13 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section className="bg-[#efefed] px-3 py-16 text-black md:px-5 lg:pt-20">
+    <section className="bg-[#efefed] px-3 py-2 text-black md:px-5 lg:pt-20">
       <div className="grid grid-cols-12 overflow-hidden gap-x-3 gap-y-3 md:gap-x-5 md:gap-y-7">
         {/* Header */}
         <div className="col-span-12">
           <div className="grid grid-cols-12 gap-x-3 gap-y-3 border-b border-black/15 pb-8 md:gap-x-5 md:gap-y-7 md:pb-5">
             <div className="col-span-12 flex items-end md:col-span-9">
-              <h2 className="flex flex-wrap items-center text-[50px] font-medium leading-[0.9] tracking-[-0.075em] text-[#111212] md:text-[60px] lg:text-[75px] 2xl:text-[96px]">
+              <h2 className="flex flex-wrap items-center text-[65px] font-medium leading-[0.9] tracking-[-0.075em] text-[#111212] md:text-[60px] lg:text-[75px] 2xl:text-[96px]">
                 <span className="mr-2.75">Our</span>
 
                 <span className="mr-2.75 inline-flex h-11.5 w-14.5 shrink-0 overflow-hidden rounded-[15%] bg-black/5 md:h-14.5 md:w-17.5 lg:h-18.75 lg:w-18.75 2xl:h-23 2xl:w-23">
