@@ -55,10 +55,15 @@ export default function LegacyCards() {
       mm.add("(min-width: 1024px)", () => {
         const items = gsap.utils.toArray<HTMLElement>(".legacy-card-wrap");
 
+        const cardDuration = 2.6;
+        const cardStagger = 1.3;
+
         gsap.set(items, {
           yPercent: 0,
           rotation: 0,
-          transformOrigin: "50% 50%",
+          transformOrigin: "50% 55%",
+          force3D: true,
+          willChange: "transform",
         });
 
         const tl = gsap.timeline({
@@ -66,7 +71,7 @@ export default function LegacyCards() {
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom bottom",
-            scrub: true,
+            scrub: 1.4,
             invalidateOnRefresh: true,
           },
         });
@@ -75,12 +80,12 @@ export default function LegacyCards() {
           tl.to(
             item,
             {
-              yPercent: -115,
-              rotation: -50,
+              yPercent: -120,
+              rotation: -28,
               ease: "none",
-              duration: 1,
+              duration: cardDuration,
             },
-            index * 0.55,
+            index * cardStagger,
           );
         });
       });

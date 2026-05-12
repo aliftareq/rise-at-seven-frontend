@@ -154,15 +154,6 @@ export default function ReadyToRiseSnake() {
               x,
               y,
             });
-
-            /**
-             * Travelling wave.
-             *
-             * The important part:
-             * earlier letters finish first,
-             * later letters remain at -60% / 10deg
-             * until the wave reaches them.
-             */
             const wavePosition = progress * (totalLetters + 8) - 3.5;
 
             letters.forEach((letter, index) => {

@@ -238,11 +238,12 @@ export default function Footer() {
 
             <form className="relative w-full" action="#">
               <input
+                suppressHydrationWarning
                 type="email"
                 required
                 name="email"
                 placeholder="Your Email Address"
-                className="w-full appearance-none rounded-full bg-[#252525] px-7 py-6 pr-24 text-[28px] font-bold leading-none tracking-tight text-white outline-none transition placeholder:text-[20px] placeholder:font-medium placeholder:text-white/50 focus:ring-3 focus:ring-white/15 lg:px-8 lg:py-7 lg:pr-28 lg:text-[38px] lg:placeholder:text-[30px]"
+                className="w-full appearance-none rounded-full bg-[#252525] px-7 py-6 pr-24 text-[28px] font-bold leading-none tracking-tight text-white outline-none transition placeholder:text-[20px] placeholder:font-medium placeholder:text-white/50 focus:ring-3 focus:ring-white/15 lg:px-8 lg:py-7 lg:pr-28 lg:text-[38px] lg:placeholder:text-[25px]"
               />
 
               <div className="absolute right-0 top-0 p-3">
