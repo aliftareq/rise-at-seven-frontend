@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+import PageLoadReveal from "@/components/PageLoadReveal";
 
 export const metadata: Metadata = {
   title: "Rise at Seven | Award winning Search-first Content Marketing Agency",
@@ -13,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PageLoadReveal />
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }
