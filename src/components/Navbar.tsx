@@ -187,7 +187,26 @@ export default function Navbar() {
 
       setIsScrolled(currentScrollY > 80);
 
-      if (currentScrollY > lastScrollY && currentScrollY > 140) {
+      const featuredWrapper = document.querySelector(
+        "[data-featured-work-wrapper]",
+      ) as HTMLElement | null;
+
+      let isInsideFeaturedWork = false;
+
+      if (featuredWrapper) {
+        const wrapperTop = featuredWrapper.offsetTop;
+        const wrapperBottom = wrapperTop + featuredWrapper.offsetHeight;
+
+        isInsideFeaturedWork =
+          currentScrollY >= wrapperTop - 2 &&
+          currentScrollY <= wrapperBottom - window.innerHeight + 2;
+      }
+
+      if (isInsideFeaturedWork && currentScrollY > 140) {
+        setHidden(true);
+        setActiveDropdown(null);
+        setActiveDropdownImage(null);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 140) {
         setHidden(true);
         setActiveDropdown(null);
         setActiveDropdownImage(null);
