@@ -210,7 +210,7 @@ export default function Blog() {
         <div className="col-span-12">
           <div className="grid grid-cols-12 items-end gap-x-3 gap-y-6 border-b border-[#cfcfca] pb-8 md:gap-x-5 md:pb-5">
             <div className="col-span-12 md:col-span-9">
-              <h2 className="flex flex-wrap items-center text-[40px] font-medium leading-[0.9] tracking-[-0.075em] text-[#111212] md:text-[75px]">
+              <h2 className="flex flex-wrap items-center text-[65px] font-medium leading-[0.9] tracking-[-0.075em] text-[#111212] md:text-[75px]">
                 <span>What&apos;s</span>
 
                 <span className="mx-2 inline-flex h-12 w-12 shrink-0 overflow-hidden rounded-[15%] bg-black/5 md:mx-4 md:h-20 md:w-20">
