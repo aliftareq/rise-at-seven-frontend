@@ -1066,107 +1066,128 @@ export default function FeaturedWork() {
             }
           >
             <style>{`
-              [data-fw-scroll]::-webkit-scrollbar {
-                display: none;
-              }
+          [data-fw-scroll]::-webkit-scrollbar {
+            display: none;
+          }
 
-              [data-featured-work-cta-wrap] {
-                display: flex;
-                justify-content: center;
-                padding: 42px 16px 0;
-              }
+          [data-featured-work-cta-wrap] {
+            display: flex;
+            justify-content: center;
+            padding: 42px 16px 0;
+          }
 
-              [data-featured-work-cta] {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                height: 68px;
-                padding: 0 38px;
-                border-radius: 999px;
-                background: #ffffff;
-                color: #111212;
-                font-size: 23px;
-                font-weight: 600;
-                line-height: 1;
-                letter-spacing: -0.055em;
-                text-decoration: none;
-              }
+          [data-featured-work-cta] {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 68px;
+            padding: 0 38px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #111212;
+            font-size: 23px;
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.055em;
+            text-decoration: none;
+          }
 
-              @media (max-width: 900px) {
-                [data-featured-work-wrapper] {
-                  padding-bottom: 48px !important;
-                }
+          @media (max-width: 900px) {
+            [data-featured-work-wrapper] {
+              padding-bottom: 56px !important;
+            }
 
-                [data-featured-work-section] {
-                  display: block !important;
-                  height: auto !important;
-                  border-radius: 18px !important;
-                  overflow: hidden !important;
-                }
+            [data-featured-work-section] {
+              display: block !important;
+              height: auto !important;
+              border-radius: 18px !important;
+              overflow: hidden !important;
+            }
 
-                [data-featured-work-left-panel] {
-                  display: none !important;
-                }
+            [data-featured-work-left-panel] {
+              display: flex !important;
+              width: 100% !important;
+              flex-basis: auto !important;
+              height: auto !important;
+              min-height: 0 !important;
+              padding: 24px 18px 18px 18px !important;
+              overflow: visible !important;
+            }
 
-                [data-featured-work-section] > div:last-child {
-                  width: 100% !important;
-                  flex-basis: auto !important;
-                  height: auto !important;
-                }
+            [data-featured-work-left-panel] > p {
+              display: block !important;
+              margin: 0 !important;
+              color: #ffffff !important;
+              font-size: 20px !important;
+              font-weight: 400 !important;
+              line-height: 0.95 !important;
+              letter-spacing: -0.065em !important;
+            }
 
-                [data-featured-work-scroll-stick] {
-                  display: none !important;
-                }
+            [data-featured-work-left-panel] > div {
+              display: none !important;
+            }
 
-                [data-fw-scroll] {
-                  height: auto !important;
-                  overflow: visible !important;
-                  padding: 14px 10px 14px 10px !important;
-                }
+            [data-featured-work-section] > div:last-child {
+              width: 100% !important;
+              flex-basis: auto !important;
+              height: auto !important;
+            }
 
-                [data-index] {
-                  margin-bottom: 10px !important;
-                  border-radius: 10px !important;
-                  cursor: pointer !important;
-                }
+            [data-featured-work-scroll-stick] {
+              display: none !important;
+            }
 
-                [data-index] > div:first-child {
-                  padding-top: 74% !important;
-                }
+            [data-fw-scroll] {
+              height: auto !important;
+              overflow: visible !important;
+              padding: 18px 16px 20px 16px !important;
+            }
 
-                [data-card-category-badge] {
-                  top: 10px !important;
-                  right: 10px !important;
-                  bottom: auto !important;
-                }
+            [data-index] {
+              margin-bottom: 14px !important;
+              border-radius: 12px !important;
+              cursor: pointer !important;
+            }
 
-                [data-card-category-badge] > div {
-                  padding: 5px 9px !important;
-                  gap: 5px !important;
-                  font-size: 10px !important;
-                }
+            [data-index] > div:first-child {
+              padding-top: 74% !important;
+            }
 
-                [data-mobile-card-info] {
-                  display: block !important;
-                }
+            [data-card-category-badge] {
+              top: 12px !important;
+              right: 12px !important;
+              bottom: auto !important;
+            }
 
-                [data-index] > div:nth-child(2),
-                [data-index] > div:nth-child(3) {
-                  display: none !important;
-                }
+            [data-card-category-badge] > div {
+              padding: 6px 10px !important;
+              gap: 6px !important;
+              font-size: 10px !important;
+            }
 
-                [data-featured-work-cta-wrap] {
-                  padding: 42px 10px 0 !important;
-                }
+            [data-mobile-card-info] {
+              display: block !important;
+            }
 
-                [data-featured-work-cta] {
-                  width: 100% !important;
-                  height: 58px !important;
-                  font-size: 20px !important;
-                }
-              }
-            `}</style>
+            [data-index] > div:nth-child(2),
+            [data-index] > div:nth-child(3) {
+              display: none !important;
+            }
+
+            [data-featured-work-cta-wrap] {
+              padding: 46px 16px 0 !important;
+            }
+
+            [data-featured-work-cta] {
+              width: 100% !important;
+              height: 60px !important;
+              padding: 0 24px !important;
+              font-size: 20px !important;
+            }
+          }
+        `}</style>
 
             {projects.map((project, index) => (
               <ProjectCard
