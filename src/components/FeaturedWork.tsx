@@ -1,10 +1,18 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/immutability */
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 
 type Project = {
   id: number;
@@ -216,7 +224,7 @@ function CategoryBadge({
   style,
 }: {
   category: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }) {
   return (
     <div
@@ -261,7 +269,7 @@ function ProjectCard({
     const el = cardRef.current;
     const root = document.querySelector("[data-fw-scroll]") as Element | null;
 
-    if (!el || !root) return;
+    if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -533,16 +541,13 @@ function ProjectCard({
 const TRACK_HEIGHT = 340;
 const THUMB_HEIGHT = 180;
 
-const WHEEL_POWER = 0.34;
-const FRICTION = 0.74;
-const TOUCH_FRICTION = 0.86;
-const STOP_THRESHOLD = 0.08;
-const MAX_VELOCITY = 58;
-
 export default function FeaturedWork() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [thumbTop, setThumbTop] = useState(0);
+  const [scrollDistance, setScrollDistance] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
 
@@ -552,15 +557,23 @@ export default function FeaturedWork() {
 
   const activeIndexRef = useRef(0);
 
-  const velocityRef = useRef(0);
-  const scrollRafRef = useRef<number | null>(null);
-
-  const isTouchingRef = useRef(false);
-  const lastTouchYRef = useRef(0);
-
   const setActiveProject = useCallback((idx: number) => {
     activeIndexRef.current = idx;
     setActiveIndex(idx);
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 900);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
   const getCenteredNameOffset = useCallback((idx: number) => {
@@ -576,6 +589,8 @@ export default function FeaturedWork() {
   }, []);
 
   const syncLeftListWithScroll = useCallback(() => {
+    if (isMobile) return;
+
     const panel = rightPanelRef.current;
     const list = nameListRef.current;
     const firstItem = nameItemRefs.current[0];
@@ -592,9 +607,11 @@ export default function FeaturedWork() {
     const nextY = firstOffset + (lastOffset - firstOffset) * progress;
 
     list.style.transform = `translate3d(0, ${nextY}px, 0)`;
-  }, [getCenteredNameOffset]);
+  }, [getCenteredNameOffset, isMobile]);
 
   const updateThumb = useCallback(() => {
+    if (isMobile) return;
+
     const panel = rightPanelRef.current;
     if (!panel) return;
 
@@ -602,7 +619,7 @@ export default function FeaturedWork() {
     const progress = maxScroll > 0 ? panel.scrollTop / maxScroll : 0;
 
     setThumbTop(progress * (TRACK_HEIGHT - THUMB_HEIGHT));
-  }, []);
+  }, [isMobile]);
 
   const detectActiveFromScroll = useCallback(() => {
     const panel = rightPanelRef.current;
@@ -640,77 +657,83 @@ export default function FeaturedWork() {
     syncLeftListWithScroll();
   }, [detectActiveFromScroll, syncLeftListWithScroll, updateThumb]);
 
-  const animateMomentumScroll = useCallback(() => {
+  useEffect(() => {
+    if (isMobile) {
+      setScrollDistance(0);
+      return;
+    }
+
+    const panel = rightPanelRef.current;
+    if (!panel) return;
+
+    const updateDistance = () => {
+      const maxScroll = panel.scrollHeight - panel.clientHeight;
+      setScrollDistance(Math.max(0, maxScroll));
+    };
+
+    updateDistance();
+
+    const id = requestAnimationFrame(updateDistance);
+
+    window.addEventListener("resize", updateDistance);
+
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("resize", updateDistance);
+    };
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (isMobile) return;
+
+    const wrapper = wrapperRef.current;
     const panel = rightPanelRef.current;
 
-    if (!panel) {
-      scrollRafRef.current = null;
-      return;
-    }
+    if (!wrapper || !panel) return;
 
-    const maxScroll = panel.scrollHeight - panel.clientHeight;
+    let rafId: number | null = null;
 
-    if (maxScroll <= 0) {
-      scrollRafRef.current = null;
-      return;
-    }
+    const syncPanelToPageScroll = () => {
+      const maxScroll = panel.scrollHeight - panel.clientHeight;
 
-    const currentVelocity = velocityRef.current;
+      if (maxScroll <= 0) return;
 
-    if (Math.abs(currentVelocity) < STOP_THRESHOLD) {
-      velocityRef.current = 0;
-      scrollRafRef.current = null;
+      const wrapperTop = wrapper.offsetTop;
+      const progress = clamp((window.scrollY - wrapperTop) / maxScroll, 0, 1);
+
+      panel.scrollTop = progress * maxScroll;
+
       updateScrollLinkedUI();
-      return;
-    }
+    };
 
-    const nextScrollTop = clamp(
-      panel.scrollTop + currentVelocity,
-      0,
-      maxScroll,
-    );
+    const onScroll = () => {
+      if (rafId !== null) return;
 
-    panel.scrollTop = nextScrollTop;
+      rafId = requestAnimationFrame(() => {
+        syncPanelToPageScroll();
+        rafId = null;
+      });
+    };
 
-    const hitTop = nextScrollTop <= 0 && currentVelocity < 0;
-    const hitBottom = nextScrollTop >= maxScroll && currentVelocity > 0;
+    syncPanelToPageScroll();
 
-    if (hitTop || hitBottom) {
-      velocityRef.current = 0;
-      scrollRafRef.current = null;
-      updateScrollLinkedUI();
-      return;
-    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
 
-    velocityRef.current *= isTouchingRef.current ? TOUCH_FRICTION : FRICTION;
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
 
-    updateScrollLinkedUI();
-
-    scrollRafRef.current = requestAnimationFrame(animateMomentumScroll);
-  }, [updateScrollLinkedUI]);
-
-  const startMomentumScroll = useCallback(() => {
-    if (scrollRafRef.current === null) {
-      scrollRafRef.current = requestAnimationFrame(animateMomentumScroll);
-    }
-  }, [animateMomentumScroll]);
-
-  const addVelocity = useCallback(
-    (amount: number) => {
-      velocityRef.current = clamp(
-        velocityRef.current + amount,
-        -MAX_VELOCITY,
-        MAX_VELOCITY,
-      );
-
-      startMomentumScroll();
-    },
-    [startMomentumScroll],
-  );
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+    };
+  }, [isMobile, scrollDistance, updateScrollLinkedUI]);
 
   const scrollToCard = useCallback(
     (idx: number) => {
       const panel = rightPanelRef.current;
+      const wrapper = wrapperRef.current;
       const card = panel?.querySelector<HTMLElement>(`[data-index="${idx}"]`);
 
       if (!panel || !card) return;
@@ -725,128 +748,24 @@ export default function FeaturedWork() {
         maxScroll,
       );
 
-      velocityRef.current = 0;
-
-      if (scrollRafRef.current !== null) {
-        cancelAnimationFrame(scrollRafRef.current);
-        scrollRafRef.current = null;
-      }
-
       setActiveProject(idx);
 
-      const smoothToTarget = () => {
-        const distance = target - panel.scrollTop;
+      if (isMobile || !wrapper) {
+        card.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
 
-        if (Math.abs(distance) < 0.5) {
-          panel.scrollTop = target;
-          updateScrollLinkedUI();
-          return;
-        }
+        return;
+      }
 
-        panel.scrollTop += distance * 0.095;
-        updateScrollLinkedUI();
-
-        requestAnimationFrame(smoothToTarget);
-      };
-
-      requestAnimationFrame(smoothToTarget);
+      window.scrollTo({
+        top: wrapper.offsetTop + target,
+        behavior: "smooth",
+      });
     },
-    [setActiveProject, updateScrollLinkedUI],
+    [isMobile, setActiveProject],
   );
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const panel = rightPanelRef.current;
-
-    if (!section || !panel) return;
-
-    const handleWheel = (event: WheelEvent) => {
-      const maxScroll = panel.scrollHeight - panel.clientHeight;
-
-      if (maxScroll <= 0) return;
-
-      const currentScroll = panel.scrollTop;
-      const goingDown = event.deltaY > 0;
-      const goingUp = event.deltaY < 0;
-
-      const atTop = currentScroll <= 0;
-      const atBottom = currentScroll >= maxScroll - 1;
-
-      if ((goingUp && atTop) || (goingDown && atBottom)) {
-        velocityRef.current = 0;
-
-        if (scrollRafRef.current !== null) {
-          cancelAnimationFrame(scrollRafRef.current);
-          scrollRafRef.current = null;
-        }
-
-        return;
-      }
-
-      event.preventDefault();
-      addVelocity(event.deltaY * WHEEL_POWER);
-    };
-
-    const handleTouchStart = (event: TouchEvent) => {
-      if (!event.touches[0]) return;
-
-      isTouchingRef.current = true;
-      lastTouchYRef.current = event.touches[0].clientY;
-      velocityRef.current = 0;
-    };
-
-    const handleTouchMove = (event: TouchEvent) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      const maxScroll = panel.scrollHeight - panel.clientHeight;
-      const currentScroll = panel.scrollTop;
-
-      const delta = lastTouchYRef.current - touch.clientY;
-      lastTouchYRef.current = touch.clientY;
-
-      const goingDown = delta > 0;
-      const goingUp = delta < 0;
-
-      const atTop = currentScroll <= 0;
-      const atBottom = currentScroll >= maxScroll - 1;
-
-      if ((goingUp && atTop) || (goingDown && atBottom)) {
-        velocityRef.current = 0;
-
-        if (scrollRafRef.current !== null) {
-          cancelAnimationFrame(scrollRafRef.current);
-          scrollRafRef.current = null;
-        }
-
-        return;
-      }
-
-      event.preventDefault();
-      addVelocity(delta * 1.35);
-    };
-
-    const handleTouchEnd = () => {
-      isTouchingRef.current = false;
-      startMomentumScroll();
-    };
-
-    section.addEventListener("wheel", handleWheel, { passive: false });
-    section.addEventListener("touchstart", handleTouchStart, { passive: true });
-    section.addEventListener("touchmove", handleTouchMove, { passive: false });
-    section.addEventListener("touchend", handleTouchEnd, { passive: true });
-
-    return () => {
-      section.removeEventListener("wheel", handleWheel);
-      section.removeEventListener("touchstart", handleTouchStart);
-      section.removeEventListener("touchmove", handleTouchMove);
-      section.removeEventListener("touchend", handleTouchEnd);
-
-      if (scrollRafRef.current !== null) {
-        cancelAnimationFrame(scrollRafRef.current);
-      }
-    };
-  }, [addVelocity, startMomentumScroll]);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
@@ -854,16 +773,19 @@ export default function FeaturedWork() {
     });
 
     return () => cancelAnimationFrame(id);
-  }, [updateScrollLinkedUI]);
+  }, [updateScrollLinkedUI, isMobile]);
 
   return (
     <div
+      ref={wrapperRef}
       data-featured-work-wrapper
       style={{
         background: "#eeeeec",
-        paddingBottom: 64,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: isMobile ? 56 : 64,
         position: "relative",
-        minHeight: "90vh",
+        height: isMobile ? "auto" : `calc(100vh + ${scrollDistance}px)`,
       }}
     >
       <section
@@ -871,37 +793,40 @@ export default function FeaturedWork() {
         data-featured-work-section
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           background: "#111212",
-          borderRadius: 24,
-          height: "90vh",
-          overflow: "hidden",
+          borderRadius: isMobile ? 18 : 24,
+          height: isMobile ? "auto" : "calc(100vh - 48px)",
+          overflow: isMobile ? "visible" : "hidden",
           fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-          overscrollBehavior: "auto",
+          overscrollBehavior: isMobile ? "auto" : "contain",
           touchAction: "pan-y",
+          position: isMobile ? "relative" : "sticky",
+          top: isMobile ? "auto" : 24,
         }}
       >
         <div
           data-featured-work-left-panel
           style={{
-            width: "50%",
-            flexBasis: "50%",
+            width: isMobile ? "100%" : "50%",
+            flexBasis: isMobile ? "auto" : "50%",
             flexShrink: 0,
             position: "relative",
-            height: "92vh",
+            height: isMobile ? "auto" : "100%",
             display: "flex",
             flexDirection: "column",
-            padding: "48px 32px 48px 40px",
-            overflow: "hidden",
+            padding: isMobile ? "24px 18px 8px 18px" : "48px 32px 48px 40px",
+            overflow: isMobile ? "visible" : "hidden",
           }}
         >
           <p
             style={{
               color: "#ffffff",
-              fontSize: 28,
-              fontWeight: 500,
-              letterSpacing: "-0.055em",
-              lineHeight: 1,
-              margin: "0 0 64px 0",
+              fontSize: isMobile ? 20 : 28,
+              fontWeight: isMobile ? 400 : 500,
+              letterSpacing: isMobile ? "-0.065em" : "-0.055em",
+              lineHeight: isMobile ? 0.95 : 1,
+              margin: isMobile ? 0 : "0 0 64px 0",
             }}
           >
             Featured Work
@@ -914,6 +839,7 @@ export default function FeaturedWork() {
               flex: 1,
               overflow: "hidden",
               paddingRight: 108,
+              display: isMobile ? "none" : "block",
             }}
           >
             <div
@@ -1022,12 +948,12 @@ export default function FeaturedWork() {
 
         <div
           style={{
-            width: "50%",
-            flexBasis: "50%",
+            width: isMobile ? "100%" : "50%",
+            flexBasis: isMobile ? "auto" : "50%",
             flexShrink: 0,
             position: "relative",
-            height: "92vh",
-            overflow: "hidden",
+            height: isMobile ? "auto" : "100%",
+            overflow: isMobile ? "visible" : "hidden",
           }}
         >
           <div
@@ -1045,149 +971,100 @@ export default function FeaturedWork() {
               background:
                 "linear-gradient(to bottom, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.62) 18%, rgba(0,0,0,0.08) 48%, rgba(0,0,0,0.08) 54%, rgba(0,0,0,0.62) 82%, rgba(0,0,0,0.96) 100%)",
               transition: "top 0.12s linear",
+              display: isMobile ? "none" : "block",
             }}
           />
 
           <div
             ref={rightPanelRef}
             data-fw-scroll
+            data-lenis-prevent
             onScroll={updateScrollLinkedUI}
             style={
               {
                 width: "100%",
-                height: "100%",
-                overflowY: "auto",
-                padding: "28px 40px 56px 0",
+                height: isMobile ? "auto" : "100%",
+                overflowY: isMobile ? "visible" : "hidden",
+                padding: isMobile ? "18px 16px 20px 16px" : "28px 40px 56px 0",
                 scrollbarWidth: "none",
-                overscrollBehavior: "auto",
+                overscrollBehavior: isMobile ? "auto" : "contain",
                 scrollBehavior: "auto",
                 WebkitOverflowScrolling: "touch",
-              } as React.CSSProperties
+              } as CSSProperties
             }
           >
             <style>{`
-          [data-fw-scroll]::-webkit-scrollbar {
-            display: none;
-          }
+              [data-fw-scroll]::-webkit-scrollbar {
+                display: none;
+              }
 
-          [data-featured-work-cta-wrap] {
-            display: flex;
-            justify-content: center;
-            padding: 42px 16px 0;
-          }
+              [data-featured-work-cta-wrap] {
+                display: flex;
+                justify-content: center;
+                padding: 42px 16px 0;
+              }
 
-          [data-featured-work-cta] {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            height: 68px;
-            padding: 0 38px;
-            border-radius: 999px;
-            background: #ffffff;
-            color: #111212;
-            font-size: 23px;
-            font-weight: 600;
-            line-height: 1;
-            letter-spacing: -0.055em;
-            text-decoration: none;
-          }
+              [data-featured-work-cta] {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                height: 68px;
+                padding: 0 38px;
+                border-radius: 999px;
+                background: #ffffff;
+                color: #111212;
+                font-size: 23px;
+                font-weight: 600;
+                line-height: 1;
+                letter-spacing: -0.055em;
+                text-decoration: none;
+              }
 
-          @media (max-width: 900px) {
-            [data-featured-work-wrapper] {
-              padding-bottom: 56px !important;
-            }
+              @media (max-width: 900px) {
+                [data-index] {
+                  margin-bottom: 14px !important;
+                  border-radius: 12px !important;
+                  cursor: pointer !important;
+                }
 
-            [data-featured-work-section] {
-              display: block !important;
-              height: auto !important;
-              border-radius: 18px !important;
-              overflow: hidden !important;
-            }
+                [data-index] > div:first-child {
+                  padding-top: 74% !important;
+                }
 
-            [data-featured-work-left-panel] {
-              display: flex !important;
-              width: 100% !important;
-              flex-basis: auto !important;
-              height: auto !important;
-              min-height: 0 !important;
-              padding: 24px 18px 18px 18px !important;
-              overflow: visible !important;
-            }
+                [data-card-category-badge] {
+                  top: 12px !important;
+                  right: 12px !important;
+                  bottom: auto !important;
+                }
 
-            [data-featured-work-left-panel] > p {
-              display: block !important;
-              margin: 0 !important;
-              color: #ffffff !important;
-              font-size: 20px !important;
-              font-weight: 400 !important;
-              line-height: 0.95 !important;
-              letter-spacing: -0.065em !important;
-            }
+                [data-card-category-badge] > div {
+                  padding: 6px 10px !important;
+                  gap: 6px !important;
+                  font-size: 10px !important;
+                }
 
-            [data-featured-work-left-panel] > div {
-              display: none !important;
-            }
+                [data-mobile-card-info] {
+                  display: block !important;
+                }
 
-            [data-featured-work-section] > div:last-child {
-              width: 100% !important;
-              flex-basis: auto !important;
-              height: auto !important;
-            }
+                [data-index] > div:nth-child(2),
+                [data-index] > div:nth-child(3) {
+                  display: none !important;
+                }
 
-            [data-featured-work-scroll-stick] {
-              display: none !important;
-            }
+                [data-featured-work-cta-wrap] {
+                  padding: 46px 16px 0 !important;
+                }
 
-            [data-fw-scroll] {
-              height: auto !important;
-              overflow: visible !important;
-              padding: 18px 16px 20px 16px !important;
-            }
-
-            [data-index] {
-              margin-bottom: 14px !important;
-              border-radius: 12px !important;
-              cursor: pointer !important;
-            }
-
-            [data-index] > div:first-child {
-              padding-top: 74% !important;
-            }
-
-            [data-card-category-badge] {
-              top: 12px !important;
-              right: 12px !important;
-              bottom: auto !important;
-            }
-
-            [data-card-category-badge] > div {
-              padding: 6px 10px !important;
-              gap: 6px !important;
-              font-size: 10px !important;
-            }
-
-            [data-mobile-card-info] {
-              display: block !important;
-            }
-
-            [data-index] > div:nth-child(2),
-            [data-index] > div:nth-child(3) {
-              display: none !important;
-            }
-
-            [data-featured-work-cta-wrap] {
-              padding: 46px 16px 0 !important;
-            }
-
-            [data-featured-work-cta] {
-              width: 100% !important;
-              height: 60px !important;
-              padding: 0 24px !important;
-              font-size: 20px !important;
-            }
-          }
-        `}</style>
+                [data-featured-work-cta] {
+                  width: 100% !important;
+                  height: 60px !important;
+                  padding: 0 24px !important;
+                  font-size: 20px !important;
+                }
+              }
+            `}</style>
 
             {projects.map((project, index) => (
               <ProjectCard
@@ -1204,7 +1081,6 @@ export default function FeaturedWork() {
       <div data-featured-work-cta-wrap>
         <Link href="/work" data-featured-work-cta className="group">
           <span className="relative block h-6 overflow-hidden whitespace-nowrap text-current">
-            {/* First text layer */}
             <span className="flex h-6 items-center justify-center gap-x-2 whitespace-nowrap text-current transition-transform duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] group-hover:-translate-y-7">
               <span className="whitespace-nowrap text-current">
                 Explore Our Work
@@ -1219,7 +1095,6 @@ export default function FeaturedWork() {
               </span>
             </span>
 
-            {/* Second text layer */}
             <span className="absolute left-0 top-0 flex h-6 translate-y-7 items-center justify-center gap-x-2 whitespace-nowrap text-current transition-transform duration-600 ease-[cubic-bezier(0.135,0.9,0.15,1)] group-hover:translate-y-0">
               <span className="whitespace-nowrap text-current">
                 Explore Our Work

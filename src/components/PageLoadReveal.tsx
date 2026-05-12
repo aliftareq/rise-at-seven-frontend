@@ -32,7 +32,7 @@ export default function PageLoadReveal() {
   return (
     <div
       ref={loaderRef}
-      className="fixed left-0 top-0 z-[9999] pointer-events-none h-[120vh] w-full bg-[#b6f5e3]"
+      className="fixed left-0 top-0 z-9999 pointer-events-none h-[120vh] w-full bg-[#b6f5e3]"
       style={{
         borderBottomLeftRadius: "50% 12%",
         borderBottomRightRadius: "50% 12%",
