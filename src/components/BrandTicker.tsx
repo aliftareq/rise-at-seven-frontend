@@ -196,7 +196,6 @@
 //   );
 // }
 
-
 "use client";
 
 import Image from "next/image";
@@ -341,16 +340,16 @@ export default function BrandMarquee() {
   };
 
   return (
-    <section className="mt-8 flex w-full items-center overflow-hidden bg-[#f0f0ee] py-3 sm:py-4">
+    <section className="mt-8 flex w-full flex-col overflow-hidden bg-[#f0f0ee] py-3 sm:py-4 md:flex-row md:items-center">
       {/* Left label */}
-      <h2 className="relative inline-flex max-w-18 shrink-0 flex-wrap justify-start text-balance pl-4 pr-3 text-left font-sans text-xs font-medium leading-tight tracking-tight text-neutral-900 sm:max-w-32 sm:pl-8 sm:pr-6 sm:text-sm">
-        The agency behind ...
+      <h2 className="relative inline-flex shrink-0 justify-start px-4 pb-2 text-left font-sans text-xs font-medium leading-tight tracking-tight text-neutral-900 sm:px-8 sm:text-sm md:max-w-32 md:flex-wrap md:pb-0 md:pr-6">
+        <span>The agency behind ...</span>
       </h2>
 
       {/* Scroller */}
       <div
         className={[
-          "relative flex-1 overflow-hidden",
+          "relative w-full flex-1 overflow-hidden",
           isDragging ? "cursor-grabbing" : "cursor-grab",
         ].join(" ")}
         onPointerDown={handlePointerDown}
@@ -365,11 +364,19 @@ export default function BrandMarquee() {
         {/* Right glassmorphism */}
         <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-[10%] bg-linear-to-l from-[rgba(240,240,238,0.98)] via-[rgba(240,240,238,0.6)] to-transparent backdrop-blur-sm sm:w-[15%]" />
 
-        {/* Right black strip */}
+        {/* Left black strip — mobile only */}
         <div
-          className="pointer-events-none absolute bottom-0 right-0 top-0 z-20"
+          className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 w-[1%] md:hidden"
           style={{
-            width: "1%",
+            background:
+              "linear-gradient(to right, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.15) 75%, transparent 100%)",
+          }}
+        />
+
+        {/* Right black strip — all screens */}
+        <div
+          className="pointer-events-none absolute bottom-0 right-0 top-0 z-20 w-[1%]"
+          style={{
             background:
               "linear-gradient(to left, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.15) 75%, transparent 100%)",
           }}
